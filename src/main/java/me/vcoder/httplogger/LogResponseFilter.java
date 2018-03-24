@@ -70,6 +70,7 @@ public class LogResponseFilter extends GenericFilterBean {
 
         /**
          * Return the underlying target stream (never {@code null}).
+         * @return the target output stream
          */
         public final OutputStream getTargetStream() {
             return this.targetStream;
@@ -118,6 +119,8 @@ public class LogResponseFilter extends GenericFilterBean {
          *            the main OutputStream
          * @param branch
          *            the second OutputStream
+         * @param response
+         *            the response
          */
         public  ConditionalProxyOutputStream(OutputStream out,
                                              OutputStream branch, ServletResponse response) {
