@@ -58,14 +58,6 @@ public class HttpExchangeTracer {
                 new HttpTrace.Response(new FilteredTraceableResponse(response)));
     }
 
-    /**
-     * Post-process the given mutable map of request {@code headers}.
-     * @param headers the headers to post-process
-     */
-    protected void postProcessRequestHeaders(Map<String, List<String>> headers) {
-
-    }
-
     private <T> T getIfIncluded(Include include, Supplier<T> valueSupplier) {
         return this.includes.contains(include) ? valueSupplier.get() : null;
     }
@@ -134,8 +126,8 @@ public class HttpExchangeTracer {
         }
 
         @Override
-        public Map<String, String[]> getParams() {
-            return this.delegate.getParams();
+        public String getBody() {
+            return this.delegate.getBody();
         }
     }
 
@@ -158,13 +150,17 @@ public class HttpExchangeTracer {
                     this.delegate::getHeaders, this::includedHeader);
         }
 
+        @Override
+        public String getBody() {
+            return this.delegate.getBody();
+        }
+
         private boolean includedHeader(String name) {
             if (name.equalsIgnoreCase(HttpHeaders.SET_COOKIE)) {
                 return HttpExchangeTracer.this.includes.contains(Include.COOKIE_HEADERS);
             }
             return true;
         }
-
     }
 
 }

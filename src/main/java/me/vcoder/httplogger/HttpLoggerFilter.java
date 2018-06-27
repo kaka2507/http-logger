@@ -122,20 +122,18 @@ public class HttpLoggerFilter extends OncePerRequestFilter implements Ordered {
             filterChain.doFilter(request, response);
             return;
         }
-
-        TraceableHttpServletRequest traceableRequest = new TraceableHttpServletRequest(request);
+        MultiReadHttpServletRequest requestWrapper = new MultiReadHttpServletRequest(request);
+        TraceableHttpServletRequest traceableRequest = new TraceableHttpServletRequest(requestWrapper);
         HttpTrace trace = this.tracer.receivedRequest(traceableRequest);
         int status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        CaptureBodyHttpServletResponse responseWrapper = new CaptureBodyHttpServletResponse(response);
         try {
-            filterChain.doFilter(request, response);
-            status = response.getStatus();
+            filterChain.doFilter(requestWrapper, responseWrapper);
         }
         finally {
-            TraceableHttpServletResponse traceableResponse = new TraceableHttpServletResponse(
-                    status == response.getStatus() ? response
-                            : new CustomStatusResponseWrapper(response, status));
+            TraceableHttpServletResponse traceableResponse = new TraceableHttpServletResponse(responseWrapper);
             this.tracer.sendingResponse(trace, traceableResponse,
-                    request::getUserPrincipal, () -> getSessionId(request));
+                    requestWrapper::getUserPrincipal, () -> getSessionId(requestWrapper));
             LOGGER.info(trace.toString());
         }
     }
@@ -143,23 +141,6 @@ public class HttpLoggerFilter extends OncePerRequestFilter implements Ordered {
     private String getSessionId(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         return session == null ? null : session.getId();
-    }
-
-    private static final class CustomStatusResponseWrapper
-            extends HttpServletResponseWrapper {
-
-        private final int status;
-
-        private CustomStatusResponseWrapper(HttpServletResponse response, int status) {
-            super(response);
-            this.status = status;
-        }
-
-        @Override
-        public int getStatus() {
-            return this.status;
-        }
-
     }
 
 }

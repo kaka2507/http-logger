@@ -13,6 +13,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 /**
@@ -20,7 +22,7 @@ import org.springframework.util.StringUtils;
  * Created on 11 Apr 2018
  */
 final class TraceableHttpServletRequest implements TraceableRequest {
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(TraceableHttpServletRequest.class);
     private final HttpServletRequest request;
 
     TraceableHttpServletRequest(HttpServletRequest request) {
@@ -71,8 +73,28 @@ final class TraceableHttpServletRequest implements TraceableRequest {
     }
 
     @Override
-    public Map<String, String[]> getParams() {
-        return request.getParameterMap();
+    public String getBody() {
+        return getPostData();
+    }
+
+    private String getPostData() {
+        StringBuilder sb = new StringBuilder();
+        try {
+            BufferedReader reader = this.request.getReader();
+            reader.mark(10000);
+            String line;
+            do {
+                line = reader.readLine();
+                if (line != null)
+                    sb.append(line).append(System.lineSeparator());
+            } while (line != null);
+            reader.reset();
+            reader.close();
+            return sb.toString();
+        } catch (IOException e) {
+            LOGGER.warn("getPostData couldn't.. get the post data", e);
+            return "";
+        }
     }
 }
 

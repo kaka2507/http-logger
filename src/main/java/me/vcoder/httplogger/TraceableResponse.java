@@ -19,4 +19,10 @@ public interface TraceableResponse {
      * @return the headers
      */
     Map<String, List<String>> getHeaders();
+
+    /**
+     * Get Body of Response
+     * @return
+     */
+    String getBody();
 }

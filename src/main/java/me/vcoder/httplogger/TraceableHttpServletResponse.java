@@ -1,5 +1,6 @@
 package me.vcoder.httplogger;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -13,9 +14,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 final class TraceableHttpServletResponse implements TraceableResponse {
 
-    private final HttpServletResponse delegate;
+    private final CaptureBodyHttpServletResponse delegate;
 
-    TraceableHttpServletResponse(HttpServletResponse response) {
+    TraceableHttpServletResponse(CaptureBodyHttpServletResponse response) {
         this.delegate = response;
     }
 
@@ -37,4 +38,12 @@ final class TraceableHttpServletResponse implements TraceableResponse {
         return headers;
     }
 
+    @Override
+    public String getBody() {
+        try {
+            return this.delegate.getBody();
+        } catch (UnsupportedEncodingException ex) {
+            return "";
+        }
+    }
 }

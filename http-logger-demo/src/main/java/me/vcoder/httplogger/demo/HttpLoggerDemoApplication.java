@@ -3,18 +3,18 @@ package me.vcoder.httplogger.demo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@SpringBootApplication
+import javax.validation.Valid;
+
+@SpringBootApplication(scanBasePackages = {"me.vcoder"})
 @Controller
-@ComponentScan("me.vcoder")
 public class HttpLoggerDemoApplication {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HttpLoggerDemoApplication.class);
 
@@ -32,5 +32,10 @@ public class HttpLoggerDemoApplication {
 	public String index() {
 		LOGGER.info("controller is running");
 		return "index";
+	}
+
+	@PostMapping(path = "/demo")
+	public ResponseEntity demo(@Valid @RequestBody SampleEntity sampleEntity) {
+		return ResponseEntity.ok(sampleEntity);
 	}
 }

@@ -34,8 +34,8 @@ public interface TraceableRequest {
     String getRemoteAddress();
 
     /**
-     * Returns the params map
-     * @return Request Body
+     * Get Request Body as String
+     * @return HTTP Request Body
      */
-    public Map<String, String[]> getParams();
+    String getBody();
 }

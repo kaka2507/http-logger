@@ -103,30 +103,14 @@ public final class HttpTrace {
 
         private final String remoteAddress;
 
-        private final Map<String, String[]> params;
+        private final String body;
 
         private Request(TraceableRequest request) {
             this.method = request.getMethod();
             this.uri = request.getUri();
             this.headers = request.getHeaders();
             this.remoteAddress = request.getRemoteAddress();
-            this.params = request.getParams();
-        }
-
-        public String getMethod() {
-            return this.method;
-        }
-
-        public URI getUri() {
-            return this.uri;
-        }
-
-        public Map<String, List<String>> getHeaders() {
-            return this.headers;
-        }
-
-        public String getRemoteAddress() {
-            return this.remoteAddress;
+            this.body = request.getBody();
         }
 
         @Override
@@ -140,23 +124,7 @@ public final class HttpTrace {
                     headers.entrySet()) {
                 out += "\n\t\t" + entry.getKey() + ":" + entry.getValue();
             }
-            if(params.size() > 0) {
-                out += "\n\tParams:";
-                for(Map.Entry<String, String[]> entry : params.entrySet()) {
-                    out += "\n\t\t" + entry.getKey() + ": [";
-                    boolean first = true;
-                    for (String param :
-                            entry.getValue()) {
-                        if(first) {
-                            out += param;
-                            first = false;
-                        } else {
-                            out += ", " + param;
-                        }
-                    }
-                    out += "]";
-                }
-            }
+            out += "\n\tRequest Body:\n--------------------------------------\n" + this.body + "\n--------------------------------------";
             return out;
         }
     }
@@ -170,17 +138,12 @@ public final class HttpTrace {
 
         private final Map<String, List<String>> headers;
 
+        private final String body;
+
         Response(TraceableResponse response) {
             this.status = response.getStatus();
             this.headers = response.getHeaders();
-        }
-
-        public int getStatus() {
-            return this.status;
-        }
-
-        public Map<String, List<String>> getHeaders() {
-            return this.headers;
+            this.body = response.getBody();
         }
 
         @Override
@@ -192,6 +155,7 @@ public final class HttpTrace {
                     headers.entrySet()) {
                 out += "\n\t\t" + entry.getKey() + ":" + entry.getValue();
             }
+            out += "\n\tResponse Body:\n--------------------------------------\n" + this.body + "\n--------------------------------------";
             return out;
         }
     }
