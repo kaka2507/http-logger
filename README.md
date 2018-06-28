@@ -5,7 +5,7 @@ HTTP Request and Response Logger Library for Spring Boot Projects
 ![alt text](https://raw.githubusercontent.com/vcoder4c/http-logger/master/screenshot/screenshot_v0.0.5.png)
 
 # How to Use
-I have already published this library to Maven Central Repo, so you can integrate it to your library very easily. Please visit [this place](https://mvnrepository.com/artifact/me.vcoder/http-logger/0.0.3) for integrating.
+I have already published this library to Maven Central Repo, so you can integrate it to your library very easily. Please visit [this place](https://mvnrepository.com/artifact/me.vcoder/http-logger/0.0.5) for integrating.
 
 # TO DO LIST
 . v0.0.5
