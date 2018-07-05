@@ -5,7 +5,7 @@ HTTP Request and Response Logger Library for Spring Boot Projects
 ![alt text](https://raw.githubusercontent.com/vcoder4c/http-logger/master/screenshot/screenshot_v0.0.5.png)
 
 # How to Use
-1. I have already published this library to Maven Central Repo, so you can integrate it to your library very easily. Please visit [this place](https://mvnrepository.com/artifact/me.vcoder/http-logger/0.0.5) for integrating.
+1. I have already published this library to Maven Central Repo, so you can integrate it to your library very easily. Please visit [this place](https://mvnrepository.com/artifact/me.vcoder/http-logger/0.0.6) for integrating.
 2. By the default, the Spring Boot will not scan all components which is outside of the default package. So, we need to specify it as blow
 - If you using the default annotation @SpringBootApplication --> just attach "me.vcoder" on the scanBasePackages property.
 - When running the Spring Boot application, the filter httpLoggerFilter should be logged on the filter chain. 
@@ -23,6 +23,9 @@ HTTP Request and Response Logger Library for Spring Boot Projects
 - [x] Log Response Body
 - [x] Exclude request with regex
 - [x] Disable log (default is enable)
+
+. v0.0.6
+- [x] Fix bugs: can not login when integrating with Spring Security (Reason: CsrfFilter can not get _csrf on form data)
 
 Please create issues for what you think this library should implement. Thanks
 

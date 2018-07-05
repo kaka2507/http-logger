@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.vcoder</groupId>
     <artifactId>http-logger</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
     <packaging>jar</packaging>
     <name>http-logger</name>
     <description>HTTP Logger for Spring Library</description>
